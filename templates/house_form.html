@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>House Price Predictor</title>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h1>Pakistan House Price Prediction</h1>
+          <div class="subtitle">Flask + DVC pipeline model deployment (Regression)</div>
+        </div>
+        <div class="badge">Lab 8</div>
+      </div>
+
+      <form action="/predict" method="POST">
+        <div class="grid">
+          <div class="field">
+            <label>Property Type</label>
+            <input name="property_type" placeholder="House / Flat / Room" required>
+          </div>
+
+          <div class="field">
+            <label>City</label>
+            <input name="city" placeholder="Lahore / Karachi" required>
+          </div>
+
+          <div class="field">
+            <label>Province</label>
+            <input name="province" placeholder="Punjab / Sindh" required>
+          </div>
+
+          <div class="field">
+            <label>Location</label>
+            <input name="location" placeholder="DHA / Gulberg" required>
+          </div>
+
+          <div class="field">
+            <label>Latitude</label>
+            <input name="latitude" type="number" step="any" placeholder="31.5204" required>
+          </div>
+
+          <div class="field">
+            <label>Longitude</label>
+            <input name="longitude" type="number" step="any" placeholder="74.3587" required>
+          </div>
+        </div>
+s
+        <div class="actions">
+          <button type="submit">Predict Price</button>
+        </div>
+      </form>
+
+      <div class="footer">Tip: Enter realistic values (city/location/lat/long) for better predictions.</div>
+    </div>
+  </div>
+</body>
+
+</html>

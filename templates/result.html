@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Prediction Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h2>Predicted Price</h2>
+          <div class="subtitle">Model output from the latest DVC-tracked version.</div>
+        </div>
+        <div class="badge">Result</div>
+      </div>
+
+      <div class="result">
+        <div class="subtitle">Estimated price (PKR):</div>
+        <div class="price">{{ prediction }}</div>
+      </div>
+
+      <div class="actions">
+        <a href="/">← Back</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
