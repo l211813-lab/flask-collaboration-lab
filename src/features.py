@@ -1,28 +1,41 @@
 import argparse
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import os
+import joblib
+import yaml
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--in_csv", type=str, required=True)
-    parser.add_argument("--out_dir", type=str, default="data")
-    parser.add_argument("--test_size", type=float, default=0.2)
-    parser.add_argument("--random_state", type=int, default=42)
+    parser.add_argument("--out_dir", type=str, default="data/processed")
     args = parser.parse_args()
 
+    with open("params.yaml") as f:
+        params = yaml.safe_load(f)["features"]
+
     df = pd.read_csv(args.in_csv)
-    X = df.drop(columns=["target"]).values
-    y = df["target"].values
+
+    y = df["price"]
+    X = df.drop(columns=["price"])
+
+    # One-hot encoding
+    X = pd.get_dummies(X, columns=["property_type", "city", "province", "location"], drop_first=True)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=args.test_size, random_state=args.random_state, stratify=y
+        X, y,
+        test_size=params["test_size"],
+        random_state=params["random_state"]
     )
 
     os.makedirs(args.out_dir, exist_ok=True)
-    np.save(os.path.join(args.out_dir, "X_train.npy"), X_train)
-    np.save(os.path.join(args.out_dir, "X_test.npy"), X_test)
-    np.save(os.path.join(args.out_dir, "y_train.npy"), y_train)
-    np.save(os.path.join(args.out_dir, "y_test.npy"), y_test)
-    print("Train/test data saved in", args.out_dir)
+
+    X_train.to_csv(os.path.join(args.out_dir, "X_train.csv"), index=False)
+    X_test.to_csv(os.path.join(args.out_dir, "X_test.csv"), index=False)
+    y_train.to_csv(os.path.join(args.out_dir, "y_train.csv"), index=False)
+    y_test.to_csv(os.path.join(args.out_dir, "y_test.csv"), index=False)
+
+    os.makedirs("models", exist_ok=True)
+    joblib.dump(list(X.columns), "models/feature_columns.pkl")
+
+    print("Train/test CSVs saved in", args.out_dir)
